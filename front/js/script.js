@@ -16,3 +16,7 @@ fetch(url)
         `
     }
 })
+.catch(err => {
+    console.log('connexion erreur, message : ' + err);
+
+})
