@@ -1,11 +1,8 @@
 const cartItemSelector = document.querySelector("#cart__items")
 const cartPriceSelector = document.querySelector("#cart__price")
-
-
 function saveBasket(basket){
     localStorage.setItem("basket", JSON.stringify(basket))
 }
-
 function getBasket(){
     let basket = localStorage.getItem("basket")
     if(basket == null){
@@ -15,7 +12,6 @@ function getBasket(){
         return JSON.parse(basket)
     }
 }
-
 function addBasket(product){
     let basket = getBasket();
     let foundProduct = basket.find(p => p.id == product.id);
@@ -28,7 +24,6 @@ function addBasket(product){
     }
     saveBasket(basket)
 }
-
 function changeQuantity(product,quantity){
     let basket = getBasket();
     let foundProduct = basket.find(p => p.id == product.id)
@@ -37,7 +32,6 @@ function changeQuantity(product,quantity){
     }
     saveBasket(basket)
 }
-
 var indexArray = 0;
 var colorsPush = [];
 var quantityPush = [];
@@ -45,7 +39,6 @@ var quantityPushTotal = 0;
 var pricePush = 0;
 var total = 0;
 let order = getBasket()
-
 for(var i = 0; i < order.length; i++){
     const url = `http://localhost:3000/api/products/${order[i].id}`
     colorsPush.push(order[i].color)
@@ -90,9 +83,16 @@ for(var i = 0; i < order.length; i++){
             `
             ${quantityPushTotal}
             `
-            const itemQuantitySelector = document.querySelector('.itemQuantity')
+            const itemQuantitySelector = document.querySelectorAll('.itemQuantity')
             const deleteItemSelector = document.querySelectorAll(".deleteItem")
+            console.log(itemQuantitySelector);
             for(let k = 0; k < deleteItemSelector.length; k++){
+                itemQuantitySelector[k].addEventListener ('click', (event) =>{
+                    order[k].quantity = itemQuantitySelector[k].value
+                    console.log(order[k].quantity);
+                    saveBasket(order)
+                    location.reload()
+                })
                 deleteItemSelector[k].addEventListener ('click', (event) => {
                     event.preventDefault 
                     order.splice(k,1)     
@@ -102,12 +102,3 @@ for(var i = 0; i < order.length; i++){
             }
         })
     }
-
-
-
-
-
-
-
-
-
