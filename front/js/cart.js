@@ -55,6 +55,7 @@ for(var i = 0; i < order.length; i++){
     fetch(url)
     .then(response => response.json())
     .then(data => {
+        console.log(order);  
         cartItemSelector.innerHTML +=
             `
             <article class="cart__item" data-id="${data.id}" data-color="${data.colors}">
@@ -90,8 +91,15 @@ for(var i = 0; i < order.length; i++){
             ${quantityPushTotal}
             `
             const itemQuantitySelector = document.querySelector('.itemQuantity')
-            
-
+            const deleteItemSelector = document.querySelectorAll(".deleteItem")
+            for(let k = 0; k < deleteItemSelector.length; k++){
+                deleteItemSelector[k].addEventListener ('click', (event) => {
+                    event.preventDefault 
+                    order.splice(k,1)     
+                    saveBasket(order)
+                    location.reload()
+                })
+            }
         })
     }
 
