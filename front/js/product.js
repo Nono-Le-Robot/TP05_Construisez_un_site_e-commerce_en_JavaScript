@@ -39,6 +39,7 @@ const url = `http://localhost:3000/api/products/${idUrl}`
 fetch(url)
 .then(response => response.json())
 .then(data => {
+    console.table(data);
     itemImgSelector.innerHTML = `<img src="${data.imageUrl}" alt="${data.altTxt}">`
     titleSelector.innerHTML = `${data.name}`
     price.innerHTML = `${data.price}`

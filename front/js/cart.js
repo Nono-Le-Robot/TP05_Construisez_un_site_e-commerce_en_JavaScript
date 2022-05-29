@@ -32,64 +32,56 @@ function changeQuantity(product,quantity){
     }
     saveBasket(basket)
 }
-var indexArray = 0;
-var colorsPush = [];
-var quantityPush = [];
-var quantityPushTotal = 0;
-var pricePush = 0;
-var total = 0;
+let totalOrder = 0;
+let totalArticle = 0;
 let order = getBasket()
-for(var i = 0; i < order.length; i++){
-    const url = `http://localhost:3000/api/products/${order[i].id}`
-    colorsPush.push(order[i].color)
-    
-    quantityPush.push(order[i].quantity)
-    quantityPushTotal += order[i].quantity
-    fetch(url)
+console.table(order);
+    fetch(`http://localhost:3000/api/products`)
     .then(response => response.json())
-    .then(data => {
-        console.log(order);  
-        cartItemSelector.innerHTML +=
-            `
-            <article class="cart__item" data-id="${data.id}" data-color="${data.colors}">
-            <div class="cart__item__img">
-            <img src="${data.imageUrl}" alt="${data.altTxt}">
-            </div>
-            <div class="cart__item__content">
-            <div class="cart__item__content__description">
-            <h2>${data.name}</h2>
-            <p>${order[indexArray].color}</p>
-            <p>${data.price * order[indexArray].quantity} €</p>
-            </div>
-            <div class="cart__item__content__settings">
-            <div class="cart__item__content__settings__quantity">
-            <p>Qté : </p>
-            <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${order[indexArray].quantity}">
-            </div>
-            <div class="cart__item__content__settings__delete">
-            <p class="deleteItem">Supprimer</p>
-            </div>
-            </div>
-            </div>
-            </article>
-            `
-            total += data.price * order[indexArray].quantity
-            indexArray++
-            totalPrice.innerHTML =
-            `
-            ${total}
-            `
-            totalQuantity.innerHTML =  
-            `
-            ${quantityPushTotal}
-            `
+    .then(data  => { 
+        for(let h = 0; h < order.length; h++ ){
+            let foundArticle = data.find(p => p._id == order[h].id);
+            if(foundArticle != undefined) {
+                cartItemSelector.innerHTML +=
+                `
+                <article class="cart__item" data-id="${foundArticle._id}" data-color="${order[h].color}">
+                <div class="cart__item__img">
+                <img src="${foundArticle.imageUrl}" alt="${foundArticle.altTxt}">
+                </div>
+                <div class="cart__item__content">
+                <div class="cart__item__content__description">
+                <h2>${foundArticle.name}</h2>
+                <p>${order[h].color}</p>
+                <p>${foundArticle.price * order[h].quantity}</p>
+                </div>
+                <div class="cart__item__content__settings">
+                <div class="cart__item__content__settings__quantity">
+                <p>Qté : </p>
+                <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${order[h].quantity}">
+                </div>
+                <div class="cart__item__content__settings__delete">
+                <p class="deleteItem">Supprimer</p>
+                </div>
+                </div>
+                </div>
+                </article>
+                `
+                totalOrder += foundArticle.price * order[h].quantity
+                totalArticle += parseInt(order[h].quantity)
+                totalPrice.innerHTML =
+                `
+                ${totalOrder}
+                `
+                totalQuantity.innerHTML =  
+                `
+                ${totalArticle}
+                `
+            }
             const itemQuantitySelector = document.querySelectorAll('.itemQuantity')
             const deleteItemSelector = document.querySelectorAll(".deleteItem")
-            console.log(itemQuantitySelector);
             for(let k = 0; k < deleteItemSelector.length; k++){
-                itemQuantitySelector[k].addEventListener ('click', (event) =>{
+                itemQuantitySelector[k].addEventListener ('change', (event) =>{
                     order[k].quantity = itemQuantitySelector[k].value
-                    console.log(order[k].quantity);
                     saveBasket(order)
                     location.reload()
                 })
@@ -100,5 +92,18 @@ for(var i = 0; i < order.length; i++){
                     location.reload()
                 })
             }
-        })
+            }
+    })
+
+const btnOrder = document.querySelector('#order')
+btnOrder.addEventListener('click', () =>
+{
+    const userData = {
+        prenom : firstName.value, 
+        nom : lastName.value,
+        adresse : address.value, 
+        ville : city.value,
+        email : email.value
     }
+    console.log(userData);
+})
