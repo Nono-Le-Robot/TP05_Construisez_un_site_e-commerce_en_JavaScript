@@ -45,7 +45,7 @@ fetch(url)
     price.innerHTML = `${data.price}`
     description.innerHTML = `${data.description}`
     document.title.textContent = `${data.name}`
-    for(var i = 0; i<data.colors.length; i++){
+    for(let i = 0; i<data.colors.length; i++){
         colors.innerHTML += `<option value="${data.colors[i]}">${data.colors[i]}</option>`
     } 
     addToCart.addEventListener("click", () => {

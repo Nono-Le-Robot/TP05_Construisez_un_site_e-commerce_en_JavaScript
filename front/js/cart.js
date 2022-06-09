@@ -96,14 +96,38 @@ console.table(order);
     })
 
 const btnOrder = document.querySelector('#order')
-btnOrder.addEventListener('click', () =>
+btnOrder.addEventListener('click', (e) =>
 {
-    const userData = {
-        prenom : firstName.value, 
-        nom : lastName.value,
-        adresse : address.value, 
-        ville : city.value,
-        email : email.value
+    e.preventDefault() 
+    const test = {
+        contact: {
+        firstName: "michel",
+        lastName: "tarace",
+        address: "44 rue du gland",
+        city: "FOURE",
+        email: "michel.tarace@gmail.com"
+        },
+        products: ["034707184e8e4eefb46400b5a3774b5f"]
     }
-    console.log(userData);
+
+    const promise01 = fetch("http://localhost:3000/api/order",{
+        method: "POST",
+        body: JSON.stringify(test), 
+        headers: {
+            "Content-Type": "application/json",
+            'Access-Control-Allow-Origin': '*',
+        }
+    }) .then((res) => {
+        console.log(res)
+       }).then((response) =>{
+        console.log(response);
+
+       })
+
 })
+
+
+
+
+    
+
