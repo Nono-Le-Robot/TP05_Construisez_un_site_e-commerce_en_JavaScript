@@ -17,7 +17,4 @@ fetch(url)
         `
     }
 })
-.catch(err => {
-    console.log('connexion erreur, message : ' + err);
-
-})
+.catch(err => {console.log('connexion erreur, message : ' + err);})

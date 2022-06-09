@@ -49,7 +49,6 @@ fetch(url)
         colors.innerHTML += `<option value="${data.colors[i]}">${data.colors[i]}</option>`
     } 
     addToCart.addEventListener("click", () => {
-
         if((colors.value === '')&&(quantity.value <= parseInt(quantity.min) || quantity.value > parseInt(quantity.max))){
             alert("veuillez renseigner une couleur et une quantitée entre 1 et 100")
         }
@@ -71,6 +70,5 @@ fetch(url)
                 alert("article(s) ajouté(s) au panier")
             }
         }
-
     })   
 })
