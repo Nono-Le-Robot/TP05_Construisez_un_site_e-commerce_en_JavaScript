@@ -1,3 +1,5 @@
+const itemImgSelector = document.querySelector(".item__img")
+const titleSelector = document.querySelector("title")
 function saveBasket(basket){
     localStorage.setItem("basket", JSON.stringify(basket))
 }
@@ -30,13 +32,8 @@ function addBasket(product){
     }
     saveBasket(basket)
 }
-// ==========================================================================================================================
-const itemImgSelector = document.querySelector(".item__img")
-const titleSelector = document.querySelector("title")
 const idUrl = window.location.search.slice(4)
-const url = `http://localhost:3000/api/products/${idUrl}`
-// ==========================================================================================================================
-fetch(url)
+fetch(`http://localhost:3000/api/products/${idUrl}`)
 .then(response => response.json())
 .then(data => {
     console.table(data);

@@ -43,7 +43,7 @@ if(order.length < 1){
     cartOrderSelector.innerHTML = ''
     cartHidden.innerHTML = ''
     emptycart.textContent = 
-    `Votre panier est actuellement vide`
+    `Panier vide`
 }
 else{
 fetch(`http://localhost:3000/api/products`)
@@ -105,65 +105,52 @@ fetch(`http://localhost:3000/api/products`)
             }
     })
 const btnOrder = document.querySelector('#order')
-console.log(order);
 btnOrder.addEventListener('click', (e) =>
 {
-    e.preventDefault() 
+        e.preventDefault() 
+        let contactRegExp = new RegExp ('^[a-zA-Z]{2,30}$')
+        let addressRegExp = new RegExp ('^[a-zA-Z0-9-éè ]{3,80}$')
+        let cityRegExp = new RegExp ('^[a-zA-Z]{2,30}$')
+        let emailRegExp = new RegExp ('^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$')
+        let testcontactRexExp = contactRegExp.test(firstName.value)
+        let testcontactRexExp2 = contactRegExp.test(lastName.value)
+        let testcontactRexExp3 = addressRegExp.test(address.value)
+        let testcontactRexExp4 = cityRegExp.test(city.value)
+        let testcontactRexExp5 = emailRegExp.test(email.value)
+        let colorTrue = "rgba(121, 242, 129, 0.60)"
+        let colorFalse = "rgba(242, 121, 121, 0.60)"
+        let checked = [false,false,false,false,false,false]
+        if (testcontactRexExp === false) {firstName.style.backgroundColor = colorFalse;firstNameErrorMsg.textContent = "Votre  prénom n'est pas valide";checked[0] = false}
+        else{firstName.style.backgroundColor = colorTrue;firstNameErrorMsg.textContent = "";checked[0] = true}
+        if (testcontactRexExp2 === false) {lastName.style.backgroundColor = colorFalse;lastNameErrorMsg.textContent = "Votre nom n'est pas valide";checked[1] = false}
+        else{lastName.style.backgroundColor = colorTrue;lastNameErrorMsg.textContent = "";checked[1] = true}
+        if (testcontactRexExp3 === false) {address.style.backgroundColor = colorFalse;addressErrorMsg.textContent = "Votre adresse n'est pas valide";checked[2] = false}
+        else{address.style.backgroundColor = colorTrue;addressErrorMsg.textContent = "";checked[2] = true}
+        if (testcontactRexExp4 === false) {city.style.backgroundColor = colorFalse;cityErrorMsg.textContent = "Votre ville n'est pas valide";checked[3] = false}
+        else{city.style.backgroundColor = colorTrue;cityErrorMsg.textContent = "";checked[3] = true}
+        if (testcontactRexExp5 === false){email.style.backgroundColor = colorFalse;emailErrorMsg.textContent = "Votre e-mail n'est pas valide";checked[4] = false}
+        else{email.style.backgroundColor = colorTrue;emailErrorMsg.textContent = "";checked[4] = true}
     let idSelectedProduct = [];
     for(let n = 0; n<order.length; n++){idSelectedProduct.push(order[n].id)}
     const orderPost = {
-        contact: {
-        firstName: firstName.value,
+        contact:
+        {firstName: firstName.value,
         lastName: lastName.value,
         address: address.value,
         city: city.value,
-        email: email.value
-        },
+        email: email.value},
         products: idSelectedProduct
     }
-    const promise01 = fetch("http://localhost:3000/api/products/order",{
-        method: "POST",
-        body: JSON.stringify(orderPost), 
-        headers: {
-            "Content-Type": "application/json",
-        }
-    }).then(response => response.json())
-    .then(data => {
-        if(data.orderId === undefined){
-            alert("Veuillez renseigner tout les champs du formulaire.")
-        }
-        else{
-            if (order.length<1){
-                alert("votre panier est vide")
-            }
-            else{
-            let contactRegExp = new RegExp ('^[a-zA-Z]{2,30}$')
-            let addressRegExp = new RegExp ('^[a-zA-Z0-9-éè ]{5,80}$')
-            let emailRegExp = new RegExp ('^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$')
-            let testcontactRexExp = contactRegExp.test(firstName.value)
-            let testcontactRexExp2 = contactRegExp.test(lastName.value)
-            let testcontactRexExp3 = addressRegExp.test(address.value)
-            let testcontactRexExp4 = addressRegExp.test(city.value)
-            let testcontactRexExp5 = emailRegExp.test(email.value)
-            let colorTrue = "rgba(121, 242, 129, 0.52)"
-            let colorFalse = "rgba(242, 121, 121, 0.52)"
-            let checked = [false,false,false,false,false,false]
-            if (testcontactRexExp === false) {firstName.style.backgroundColor = colorFalse;checked[0] = false}
-            else{firstName.style.backgroundColor = colorTrue;checked[0] = true}
-            if (testcontactRexExp2 === false) {lastName.style.backgroundColor = colorFalse;checked[1] = false}
-            else{lastName.style.backgroundColor = colorTrue;checked[1] = true}
-            if (testcontactRexExp3 === false) {address.style.backgroundColor = colorFalse;checked[2] = false}
-            else{address.style.backgroundColor = colorTrue;checked[2] = true}
-            if (testcontactRexExp4 === false) {city.style.backgroundColor = colorFalse;checked[3] = false}
-            else{city.style.backgroundColor = colorTrue;checked[3] = true}
-            if (testcontactRexExp5 === false){email.style.backgroundColor = colorFalse;checked[4] = false}
-            else{email.style.backgroundColor = colorTrue;checked[4] = true}
-            if(checked[0] && checked[1] && checked[2] && checked[3] && checked[4] === true){
-                    window.location.href= `./confirmation.html?orderId=${data.orderId}`
-                    saveBasket ([])
-            }
-        }
-        }
-    })
+    if(checked[0] && checked[1] && checked[2] && checked[3] && checked[4] === true){
+        const promise01 = fetch("http://localhost:3000/api/products/order",{
+            method: "POST",
+            body: JSON.stringify(orderPost), 
+            headers: {"Content-Type": "application/json"}
+        }).then(response => response.json())
+        .then(data => {
+            window.location.href= `./confirmation.html?order_Id=${data.orderId}`
+            saveBasket ([])
+        })
+    }
 })
 }
