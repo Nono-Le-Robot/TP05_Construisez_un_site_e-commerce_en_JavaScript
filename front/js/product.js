@@ -46,14 +46,14 @@ fetch(`http://localhost:3000/api/products/${idUrl}`)
         colors.innerHTML += `<option value="${data.colors[i]}">${data.colors[i]}</option>`
     } 
     addToCart.addEventListener("click", () => {
-        if((colors.value === '')&&(quantity.value <= parseInt(quantity.min) || quantity.value > parseInt(quantity.max))){
+        if((colors.value === '')&&(quantity.value <= parseInt(quantity.min-1) || quantity.value > parseInt(quantity.max))){
             alert("veuillez renseigner une couleur et une quantitée entre 1 et 100")
         }
         else{
             if(colors.value === ''){
                 alert("veuillez renseigner une couleur")
             }
-            else if(quantity.value > parseInt(quantity.max) || quantity.value <= parseInt(quantity.min) ){
+            else if(quantity.value > parseInt(quantity.max) || quantity.value <= parseInt(quantity.min-1) ){
                 alert("veuillez renseigner une quantitée entre 1 et 100")
             }
             else{

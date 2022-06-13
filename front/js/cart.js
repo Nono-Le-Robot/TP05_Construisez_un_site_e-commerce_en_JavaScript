@@ -1,40 +1,24 @@
+const btnOrder = document.querySelector('#order')
 const cartItemSelector = document.querySelector("#cart__items")
 const cartPriceSelector = document.querySelector("#cart__price")
 const cartOrderSelector = document.querySelector('.cart__order')
 const cartHidden = document.querySelector("#cartAndFormContainer > section > div.cart__price")
 const emptycart = document.querySelector("#cartAndFormContainer > h1")
-function saveBasket(basket){
-    localStorage.setItem("basket", JSON.stringify(basket))
-}
-function getBasket(){
-    let basket = localStorage.getItem("basket")
-    if(basket == null){
-        return [];
-    }
-    else{
-        return JSON.parse(basket)
-    }
-}
+function saveBasket(basket){ localStorage.setItem("basket", JSON.stringify(basket))}
+function getBasket(){let basket = localStorage.getItem("basket")
+    if(basket == null){ return [];}
+    else{return JSON.parse(basket)}}
 function addBasket(product){
     let basket = getBasket();
     let foundProduct = basket.find(p => p.id == product.id);
-    if(foundProduct != undefined){
-        foundProduct.quantity++;
-    }
-    else{
-        product.quantity = 1;
-        basket.push(product)
-    }
-    saveBasket(basket)
-}
+    if(foundProduct != undefined){foundProduct.quantity++; }
+    else{product.quantity = 1;basket.push(product)}
+    saveBasket(basket)}
 function changeQuantity(product,quantity){
     let basket = getBasket();
     let foundProduct = basket.find(p => p.id == product.id)
-    if(foundProduct != undefined){
-        foundProduct.quantity += quantity.value;
-    }
-    saveBasket(basket)
-}
+    if(foundProduct != undefined){foundProduct.quantity += quantity.value;}
+    saveBasket(basket)}
 let totalOrder = 0;
 let totalArticle = 0;
 let order = getBasket()
@@ -43,8 +27,7 @@ if(order.length < 1){
     cartOrderSelector.innerHTML = ''
     cartHidden.innerHTML = ''
     emptycart.textContent = 
-    `Panier vide`
-}
+    `Panier vide`}
 else{
 fetch(`http://localhost:3000/api/products`)
     .then(response => response.json())
@@ -78,14 +61,8 @@ fetch(`http://localhost:3000/api/products`)
                 `
                 totalOrder += foundArticle.price * order[h].quantity
                 totalArticle += parseInt(order[h].quantity)
-                totalPrice.innerHTML =
-                `
-                ${totalOrder}
-                `
-                totalQuantity.innerHTML =  
-                `
-                ${totalArticle}
-                `
+                totalPrice.innerHTML = `${totalOrder}`
+                totalQuantity.innerHTML =  `${totalArticle}`
             }
             const itemQuantitySelector = document.querySelectorAll('.itemQuantity')
             const deleteItemSelector = document.querySelectorAll(".deleteItem")
@@ -93,20 +70,16 @@ fetch(`http://localhost:3000/api/products`)
                 itemQuantitySelector[k].addEventListener ('change', (event) =>{
                     order[k].quantity = itemQuantitySelector[k].value
                     saveBasket(order)
-                    location.reload()
-                })
+                    location.reload()})
                 deleteItemSelector[k].addEventListener ('click', (event) => {
                     event.preventDefault 
                     order.splice(k,1)     
                     saveBasket(order)
-                    location.reload()
-                })
+                    location.reload()})
             }
             }
     })
-const btnOrder = document.querySelector('#order')
-btnOrder.addEventListener('click', (e) =>
-{
+btnOrder.addEventListener('click', (e) => {
         e.preventDefault() 
         let contactRegExp = new RegExp ('^[a-zA-Z]{2,30}$')
         let addressRegExp = new RegExp ('^[a-zA-Z0-9-éè ]{3,80}$')
@@ -130,26 +103,26 @@ btnOrder.addEventListener('click', (e) =>
         else{city.style.backgroundColor = colorTrue;cityErrorMsg.textContent = "";checked[3] = true}
         if (testcontactRexExp5 === false){email.style.backgroundColor = colorFalse;emailErrorMsg.textContent = "Votre e-mail n'est pas valide";checked[4] = false}
         else{email.style.backgroundColor = colorTrue;emailErrorMsg.textContent = "";checked[4] = true}
-    let idSelectedProduct = [];
-    for(let n = 0; n<order.length; n++){idSelectedProduct.push(order[n].id)}
-    const orderPost = {
-        contact:
-        {firstName: firstName.value,
-        lastName: lastName.value,
-        address: address.value,
-        city: city.value,
-        email: email.value},
-        products: idSelectedProduct
-    }
-    if(checked[0] && checked[1] && checked[2] && checked[3] && checked[4] === true){
-        const promise01 = fetch("http://localhost:3000/api/products/order",{
-            method: "POST",
-            body: JSON.stringify(orderPost), 
-            headers: {"Content-Type": "application/json"}
-        }).then(response => response.json())
-        .then(data => {
-            window.location.href= `./confirmation.html?order_Id=${data.orderId}`
-            saveBasket ([])
+        let idSelectedProduct = [];
+        for(let n = 0; n<order.length; n++){idSelectedProduct.push(order[n].id)}
+        const orderPost = {
+            contact:
+                {firstName: firstName.value,
+                lastName: lastName.value,
+                address: address.value,
+                city: city.value,
+                email: email.value},
+            products: idSelectedProduct
+        }
+        if(checked[0] && checked[1] && checked[2] && checked[3] && checked[4] === true){
+            const promise01 = fetch("http://localhost:3000/api/products/order",{
+                method: "POST",
+                body: JSON.stringify(orderPost), 
+                headers: {"Content-Type": "application/json"}
+            }).then(response => response.json())
+            .then(data => {
+                window.location.href= `./confirmation.html?order_Id=${data.orderId}`
+                saveBasket ([])
         })
     }
 })
