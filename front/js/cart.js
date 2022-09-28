@@ -29,7 +29,7 @@ if(order.length < 1){
     emptycart.textContent = 
     `Panier vide`}
 else{
-fetch(`http://localhost:3000/api/products`)
+fetch(`https://sannier-renaud.fr/portfolio/e-commerce/api/products`)
     .then(response => response.json())
     .then(data  => { 
         for(let h = 0; h < order.length; h++ ){
@@ -115,7 +115,7 @@ btnOrder.addEventListener('click', (e) => {
             products: idSelectedProduct
         }
         if(checked[0] && checked[1] && checked[2] && checked[3] && checked[4] === true){
-            const promise01 = fetch("http://localhost:3000/api/products/order",{
+            const promise01 = fetch("https://sannier-renaud.fr/portfolio/e-commerce/api/products/order",{
                 method: "POST",
                 body: JSON.stringify(orderPost), 
                 headers: {"Content-Type": "application/json"}

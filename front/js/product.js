@@ -33,7 +33,7 @@ function addBasket(product){
     saveBasket(basket)
 }
 const idUrl = window.location.search.slice(4)
-fetch(`http://localhost:3000/api/products/${idUrl}`)
+fetch(`https://sannier-renaud.fr/portfolio/e-commerce/api/products/${idUrl}`)
 .then(response => response.json())
 .then(data => {
     console.table(data);

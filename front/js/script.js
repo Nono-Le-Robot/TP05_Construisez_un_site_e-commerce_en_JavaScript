@@ -1,5 +1,5 @@
 const itemsSelector = document.querySelector('#items')
-const url = `http://localhost:3000/api/products`
+const url = `https://sannier-renaud.fr/portfolio/e-commerce/api/products`
 fetch(url)
 .then(response => response.json())
 .then(data => {
@@ -7,7 +7,7 @@ fetch(url)
     for(let i = 0; i < data.length; i++){
         itemsSelector.innerHTML +=
         `
-        <a href="./product.html?id=${data[i]._id}">
+        <a href="pages/product.html?id=${data[i]._id}">
         <article>
         <img src="${data[i].imageUrl}" alt="${data[i].altTxt}">
         <h3 class="productName">${data[i].name}</h3>
