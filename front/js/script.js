@@ -1,12 +1,11 @@
-const itemsSelector = document.querySelector('#items')
-const url = `https://sannier-renaud.fr/portfolio/e-commerce/api/products`
+const itemsSelector = document.querySelector("#items");
+const url = `https://sannier-renaud.fr/portfolio/kanap/api/products`;
 fetch(url)
-.then(response => response.json())
-.then(data => {
+  .then((response) => response.json())
+  .then((data) => {
     console.table(data);
-    for(let i = 0; i < data.length; i++){
-        itemsSelector.innerHTML +=
-        `
+    for (let i = 0; i < data.length; i++) {
+      itemsSelector.innerHTML += `
         <a href="pages/product.html?id=${data[i]._id}">
         <article>
         <img src="${data[i].imageUrl}" alt="${data[i].altTxt}">
@@ -14,7 +13,9 @@ fetch(url)
         <p class="productDescription">${data[i].description}</p>
         </article>
         </a>
-        `
+        `;
     }
-})
-.catch(err => {console.log('connexion erreur, message : ' + err);})
+  })
+  .catch((err) => {
+    console.log("connexion erreur, message : " + err);
+  });
